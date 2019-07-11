@@ -1,0 +1,2 @@
+E:\Users\Gabby Peneyra\source\repos\XPay.World\XPW.Utilities\obj\Debug\XPW.Utilities.csprojAssemblyReference.cache
+E:\Users\Gabby Peneyra\source\repos\XPay.World\XPW.Utilities\obj\Debug\XPW.Utilities.csproj.CoreCompileInputs.cache
