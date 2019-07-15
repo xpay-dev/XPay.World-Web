@@ -1,0 +1,16 @@
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\XPW.UserAuthToken.dll.config
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\XPW.UserAuthToken.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\XPW.UserAuthToken.pdb
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\Newtonsoft.Json.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\System.Net.Http.Formatting.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\System.Web.Http.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\System.Web.Http.WebHost.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\Newtonsoft.Json.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\System.Net.Http.Formatting.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\System.Web.Http.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\bin\System.Web.Http.WebHost.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\obj\Debug\XPW.UserAuthToken.csprojAssemblyReference.cache
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\obj\Debug\XPW.UserAuthToken.csproj.CoreCompileInputs.cache
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\obj\Debug\XPW.UserAuthToken.csproj.CopyComplete
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\obj\Debug\XPW.UserAuthToken.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.UserAuthToken\obj\Debug\XPW.UserAuthToken.pdb

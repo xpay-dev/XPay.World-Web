@@ -1,0 +1,16 @@
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\XPW.DeviceManagement.dll.config
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\XPW.DeviceManagement.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\XPW.DeviceManagement.pdb
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\Newtonsoft.Json.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\System.Net.Http.Formatting.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\System.Web.Http.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\System.Web.Http.WebHost.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\Newtonsoft.Json.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\System.Net.Http.Formatting.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\System.Web.Http.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\bin\System.Web.Http.WebHost.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\obj\Debug\XPW.DeviceManagement.csprojAssemblyReference.cache
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\obj\Debug\XPW.DeviceManagement.csproj.CoreCompileInputs.cache
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\obj\Debug\XPW.DeviceManagement.csproj.CopyComplete
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\obj\Debug\XPW.DeviceManagement.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.DeviceManagement\obj\Debug\XPW.DeviceManagement.pdb

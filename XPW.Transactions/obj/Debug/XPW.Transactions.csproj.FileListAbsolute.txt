@@ -1,0 +1,16 @@
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\XPW.Transactions.dll.config
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\XPW.Transactions.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\XPW.Transactions.pdb
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\Newtonsoft.Json.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\System.Net.Http.Formatting.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\System.Web.Http.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\System.Web.Http.WebHost.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\Newtonsoft.Json.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\System.Net.Http.Formatting.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\System.Web.Http.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\bin\System.Web.Http.WebHost.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\obj\Debug\XPW.Transactions.csprojAssemblyReference.cache
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\obj\Debug\XPW.Transactions.csproj.CoreCompileInputs.cache
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\obj\Debug\XPW.Transactions.csproj.CopyComplete
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\obj\Debug\XPW.Transactions.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Transactions\obj\Debug\XPW.Transactions.pdb

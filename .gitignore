@@ -3,3 +3,7 @@
 ################################################################################
 
 *.lock
+/.vs/XPay.World/v16/Server/sqlite3/storage.ide-wal
+/.vs/XPay.World/v16/Server/sqlite3/storage.ide-shm
+/.vs/XPay.World/v16/Server/sqlite3/storage.ide
+*.suo

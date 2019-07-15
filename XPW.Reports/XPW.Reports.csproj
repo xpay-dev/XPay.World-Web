@@ -100,12 +100,6 @@
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\XPW.Utilities\XPW.Utilities.csproj">
-      <Project>{ca502dc3-7d62-4fd2-8705-55ded1af733f}</Project>
-      <Name>XPW.Utilities</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

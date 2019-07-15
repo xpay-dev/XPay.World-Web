@@ -1,0 +1,16 @@
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\XPW.MainAPI.dll.config
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\XPW.MainAPI.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\XPW.MainAPI.pdb
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\Newtonsoft.Json.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\System.Net.Http.Formatting.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\System.Web.Http.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\System.Web.Http.WebHost.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\Newtonsoft.Json.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\System.Net.Http.Formatting.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\System.Web.Http.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\bin\System.Web.Http.WebHost.xml
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\obj\Debug\XPW.MainAPI.csprojAssemblyReference.cache
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\obj\Debug\XPW.MainAPI.csproj.CoreCompileInputs.cache
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\obj\Debug\XPW.MainAPI.csproj.CopyComplete
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\obj\Debug\XPW.MainAPI.dll
+E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.MainAPI\obj\Debug\XPW.MainAPI.pdb
