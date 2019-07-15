@@ -9,7 +9,6 @@ E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Clients\bin\Newtonsoft.Json.xml
 E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Clients\bin\System.Net.Http.Formatting.xml
 E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Clients\bin\System.Web.Http.xml
 E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Clients\bin\System.Web.Http.WebHost.xml
-E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Clients\obj\Debug\XPW.Clients.csprojAssemblyReference.cache
 E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Clients\obj\Debug\XPW.Clients.csproj.CoreCompileInputs.cache
 E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Clients\obj\Debug\XPW.Clients.csproj.CopyComplete
 E:\Users\Gabby Peneyra\source\repos\Xpay.Web\XPW.Clients\obj\Debug\XPW.Clients.dll

@@ -21,6 +21,7 @@
 /*/[B][b]in/[R][r]eleased/*.*
 .vs/*.*
 *.txt
+
 /XPW.AccessCredentials/bin/*.dll
 /XPW.AccessCredentials/bin/*.pdb
 /XPW.AccessCredentials/bin/*.config
@@ -29,3 +30,12 @@
 /XPW.AccessCredentials/obj/Debug/*.pdb
 /XPW.AccessCredentials/obj/Debug/*.cache
 /XPW.AccessCredentials/obj/Debug/*.CopyComplete
+
+/XPW.Clients/bin/*.dll
+/XPW.Clients/bin/*.pdb
+/XPW.Clients/bin/*.config
+/XPW.Clients/bin/*.xml
+/XPW.Clients/obj/Debug/*.dll
+/XPW.Clients/obj/Debug/*.pdb
+/XPW.Clients/obj/Debug/*.cache
+/XPW.Clients/obj/Debug/*.CopyComplete
