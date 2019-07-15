@@ -21,10 +21,11 @@
 /*/[B][b]in/[R][r]eleased/*.*
 .vs/*.*
 *.txt
-*.dll
+/XPW.AccessCredentials/bin/*.dll
 /XPW.AccessCredentials/bin/*.pdb
 /XPW.AccessCredentials/bin/*.config
 /XPW.AccessCredentials/bin/*.xml
+/XPW.AccessCredentials/obj/Debug/*.dll
 /XPW.AccessCredentials/obj/Debug/*.pdb
 /XPW.AccessCredentials/obj/Debug/*.cache
 /XPW.AccessCredentials/obj/Debug/*.CopyComplete
