@@ -111,3 +111,14 @@
 /XPW.BackOffice/obj/Debug/*.pdb
 /XPW.BackOffice/obj/Debug/*.cache
 /XPW.BackOffice/obj/Debug/*.CopyComplete
+
+/XPW.NoSQLDemo/bin/*.dll
+/XPW.NoSQLDemo/bin/*.pdb
+/XPW.NoSQLDemo/bin/*.config
+/XPW.NoSQLDemo/bin/*.xml
+/XPW.NoSQLDemo/obj/Debug/*.dll
+/XPW.NoSQLDemo/obj/Debug/*.pdb
+/XPW.NoSQLDemo/obj/Debug/*.cache
+/XPW.NoSQLDemo/obj/Debug/*.CopyComplete
+
+*.lastcodeanalysissucceeded
