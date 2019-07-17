@@ -72,10 +72,8 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
                               throw new Exception("No data to be update");
                          }
                          roles               = roles.Where(a => !a.Id.Equals(role.Id)).ToList();
-                         old.Name            = role.Name;
-                         old.Order           = role.Order;
-                         old.DateUpdated     = DateTime.Now;
-                         roles.Add(old);
+                         role.DateUpdated     = DateTime.Now;
+                         roles.Add(role);
                          _ = await Writer<XPayRole>.JsonWriterListAsync(roles, Model1FileName);
                          return old;
                     } catch (Exception ex){

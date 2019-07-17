@@ -13,11 +13,15 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
      public class AccountsController : BaseAPIController {
           private static string Model1 { get; set; }
           private static string Model1FileName { get; set; }
+          private static string Model2 { get; set; }
+          private static string Model2FileName { get; set; }
           private List<XPayAccount> accounts { get; set; }
           public AccountsController() {
-               Model1         = new XPayAccount().GetType().Name;
+               Model1 = new XPayAccount().GetType().Name;
                Model1FileName = AppDataFolder + "InnerAPI\\" + Model1 + ".json";
-               FileChecker<XPayAccount>.AutoCreateIfNotExists(Model1FileName);
+               Model2 = new XPayRole().GetType().Name;
+               Model2FileName = AppDataFolder + "InnerAPI\\" + Model2 + ".json";
+               FileChecker<XPayAccount>.AutoCreateIfNotExists(Model2FileName);
           }
           [Route("get-all")]
           [HttpGet]
@@ -52,6 +56,9 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
                     try {
                          accounts = await Reader<XPayAccount>.JsonReaderListAsync(Model1FileName);
                          var account = accounts.Where(a => a.Id.Equals(id)).FirstOrDefault();
+                         var roles = await Reader<XPayRole>.JsonReaderListAsync(Model2FileName);
+                         var role = roles.Where(a => a.Id.Equals(account.XPayRoleId)).FirstOrDefault();
+                         account.XPayRole = role;
                          return account;
                     } catch {
                          return null;
@@ -64,7 +71,15 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
                return await Task.Run(async () => {
                     try {
                          accounts = await Reader<XPayAccount>.JsonReaderListAsync(Model1FileName);
+                         if (accounts.Count == 0) {
+                              throw new Exception("No data to be update");
+                         }
+                         var old = accounts.Where(a => a.Id.Equals(account.Id)).ToList();
+                         if (old == null) {
+                              throw new Exception("No data to be update");
+                         }
                          accounts = accounts.Where(a => !a.Id.Equals(account.Id)).ToList();
+                         account.DateUpdated = DateTime.Now;
                          accounts.Add(account);
                          _ = await Writer<XPayAccount>.JsonWriterListAsync(accounts, Model1FileName);
                          return account;

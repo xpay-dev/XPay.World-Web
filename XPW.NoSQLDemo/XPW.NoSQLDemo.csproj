@@ -93,6 +93,7 @@
     <Compile Include="Configurations\BaseAPIController.cs" />
     <Compile Include="Configurations\DataTable.cs" />
     <Compile Include="Controllers\InnerAPI\AccountsController.cs" />
+    <Compile Include="Controllers\InnerAPI\ContactInformationController.cs" />
     <Compile Include="Controllers\InnerAPI\RolesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
