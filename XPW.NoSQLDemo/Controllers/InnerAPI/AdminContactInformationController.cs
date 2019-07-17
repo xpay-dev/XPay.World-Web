@@ -9,11 +9,11 @@ using XPW.NoSQLDemo.Utilities;
 using XPW.Utilities.NoSQL;
 
 namespace XPW.NoSQLDemo.Controllers.InnerAPI {
-     public class ContactInformationController : BaseAPIController {
+     public class AdminContactInformationController : BaseAPIController {
           private static string Model1 { get; set; }
           private static string Model1FileName { get; set; }
           private List<XPayContactInformation> contactInformation { get; set; }
-          public ContactInformationController() {
+          public AdminContactInformationController() {
                Model1 = new XPayContactInformation().GetType().Name;
                Model1FileName = AppDataFolder + "InnerAPI\\" + Model1 + ".json";
                FileChecker<XPayContactInformation>.AutoCreateIfNotExists(Model1FileName);

@@ -92,9 +92,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Configurations\BaseAPIController.cs" />
     <Compile Include="Configurations\DataTable.cs" />
-    <Compile Include="Controllers\InnerAPI\AccountsController.cs" />
-    <Compile Include="Controllers\InnerAPI\ContactInformationController.cs" />
-    <Compile Include="Controllers\InnerAPI\RolesController.cs" />
+    <Compile Include="Controllers\InnerAPI\AdminAccountsController.cs" />
+    <Compile Include="Controllers\InnerAPI\AdminContactInformationController.cs" />
+    <Compile Include="Controllers\InnerAPI\AdminRolesController.cs" />
+    <Compile Include="Controllers\OuterAPI\AccountsController.cs" />
+    <Compile Include="Controllers\OuterAPI\ContactInformationController.cs" />
+    <Compile Include="Controllers\OuterAPI\RolesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -121,7 +124,6 @@
   <ItemGroup>
     <Folder Include="App_Data\InnerAPI\" />
     <Folder Include="App_Data\OuterAPI\" />
-    <Folder Include="Controllers\OuterAPI\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

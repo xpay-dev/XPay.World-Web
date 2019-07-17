@@ -13,18 +13,18 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
      public class RolesController : BaseAPIController {
           private static string Model1 { get; set; }
           private static string Model1FileName { get; set; }
-          private List<XPayRole> roles { get; set; }
+          private List<ClientsRole> roles { get; set; }
           public RolesController() {
-               Model1         = new XPayRole().GetType().Name;
+               Model1 = new ClientsRole().GetType().Name;
                Model1FileName = AppDataFolder + "InnerAPI\\" + Model1 + ".json";
-               FileChecker<XPayAccount>.AutoCreateIfNotExists(Model1FileName);
+               FileChecker<ClientsAccount>.AutoCreateIfNotExists(Model1FileName);
           }
           [Route("get-all")]
           [HttpGet]
-          public async Task<List<XPayRole>> GetAll() {
+          public async Task<List<ClientsRole>> GetAll() {
                return await Task.Run(async () => {
                     try {
-                         roles = await Reader<XPayRole>.JsonReaderListAsync(Model1FileName);
+                         roles = await Reader<ClientsRole>.JsonReaderListAsync(Model1FileName);
                          return roles;
                     } catch {
                          return null;
@@ -33,12 +33,12 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
           }
           [Route("save")]
           [HttpPost]
-          public async Task<XPayRole> Save(XPayRole role) {
+          public async Task<ClientsRole> Save(ClientsRole role) {
                return await Task.Run(async () => {
                     try {
-                         roles = await Reader<XPayRole>.JsonReaderListAsync(Model1FileName);
+                         roles = await Reader<ClientsRole>.JsonReaderListAsync(Model1FileName);
                          roles.Add(role);
-                         _ = await Writer<XPayRole>.JsonWriterListAsync(roles, Model1FileName);
+                         _ = await Writer<ClientsRole>.JsonWriterListAsync(roles, Model1FileName);
                          return role;
                     } catch {
                          return null;
@@ -47,10 +47,10 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
           }
           [Route("get/{id}")]
           [HttpGet]
-          public async Task<XPayRole> Get(Guid id) {
+          public async Task<ClientsRole> Get(Guid id) {
                return await Task.Run(async () => {
                     try {
-                         roles = await Reader<XPayRole>.JsonReaderListAsync(Model1FileName);
+                         roles = await Reader<ClientsRole>.JsonReaderListAsync(Model1FileName);
                          var role = roles.Where(a => a.Id.Equals(id)).FirstOrDefault();
                          return role;
                     } catch {
@@ -60,10 +60,10 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
           }
           [Route("edit")]
           [HttpPut]
-          public async Task<XPayRole> Edit(XPayRole role) {
+          public async Task<ClientsRole> Edit(ClientsRole role) {
                return await Task.Run(async () => {
                     try {
-                         roles = await Reader<XPayRole>.JsonReaderListAsync(Model1FileName);
+                         roles = await Reader<ClientsRole>.JsonReaderListAsync(Model1FileName);
                          if (roles.Count == 0) {
                               throw new Exception("No data to be update");
                          }
@@ -71,26 +71,26 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
                          if (old == null) {
                               throw new Exception("No data to be update");
                          }
-                         roles               = roles.Where(a => !a.Id.Equals(role.Id)).ToList();
-                         role.DateUpdated     = DateTime.Now;
+                         roles = roles.Where(a => !a.Id.Equals(role.Id)).ToList();
+                         role.DateUpdated = DateTime.Now;
                          roles.Add(role);
-                         _ = await Writer<XPayRole>.JsonWriterListAsync(roles, Model1FileName);
+                         _ = await Writer<ClientsRole>.JsonWriterListAsync(roles, Model1FileName);
                          return old;
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
                          throw ex;
                     }
                });
           }
           [Route("delete/{id}")]
           [HttpDelete]
-          public async Task<List<XPayRole>> Delete(Guid id) {
+          public async Task<List<ClientsRole>> Delete(Guid id) {
                return await Task.Run(async () => {
-                    List<XPayAccount> accounts = new List<XPayAccount>();
+                    List<ClientsAccount> accounts = new List<ClientsAccount>();
                     try {
-                         roles = await Reader<XPayRole>.JsonReaderListAsync(Model1FileName);
+                         roles = await Reader<ClientsRole>.JsonReaderListAsync(Model1FileName);
                          roles = roles.Where(a => !a.Id.Equals(id)).ToList();
-                         _ = await Writer<XPayAccount>.JsonWriterListAsync(accounts, Model1FileName);
-                         return await Reader<XPayRole>.JsonReaderListAsync(Model1FileName); ;
+                         _ = await Writer<ClientsAccount>.JsonWriterListAsync(accounts, Model1FileName);
+                         return await Reader<ClientsRole>.JsonReaderListAsync(Model1FileName); ;
                     } catch {
                          return null;
                     }
