@@ -102,10 +102,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountsPasswordHistory.cs" />
-    <Compile Include="Models\ClientMerchantDevices.cs" />
+    <Compile Include="Models\ClientsBusinessInformation.cs" />
+    <Compile Include="Models\BusinessType.cs" />
+    <Compile Include="Models\ClientsMerchantDevices.cs" />
     <Compile Include="Models\ClientsAccount.cs" />
     <Compile Include="Models\ClientsContactInformation.cs" />
     <Compile Include="Models\ClientsRole.cs" />
+    <Compile Include="Models\MerchantCategory.cs" />
+    <Compile Include="Models\MDRRate.cs" />
     <Compile Include="Models\XPayAccount.cs" />
     <Compile Include="Models\XPayContactInformation.cs" />
     <Compile Include="Models\XPayRole.cs" />

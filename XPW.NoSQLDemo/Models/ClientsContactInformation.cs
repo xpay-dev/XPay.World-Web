@@ -5,6 +5,7 @@ using XPW.Utilities.BaseContext;
 
 namespace XPW.NoSQLDemo.Models {
      public class ClientsContactInformation : BaseModelGuid {
+
           [Required]
           [StringLength(20)]
           public string FirstName { get; set; }
@@ -20,5 +21,23 @@ namespace XPW.NoSQLDemo.Models {
           [Required]
           [StringLength(30)]
           public string MobileNumber { get; set; }
+          [Required]
+          [StringLength(100)]
+          public string Address1 { get; set; }
+          [Required]
+          [StringLength(100)]
+          public string Address2 { get; set; }
+          [Required]
+          [StringLength(50)]
+          public string CityState { get; set; }
+          [Required]
+          [StringLength(50)]
+          public string Province { get; set; }
+          [Required]
+          [StringLength(50)]
+          public string Country { get; set; }
+          [Required]
+          [StringLength(50)]
+          public string ZipCode { get; set; }
      }
 }

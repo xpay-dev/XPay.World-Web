@@ -9,6 +9,7 @@ namespace XPW.NoSQLDemo.Models {
           public XPayAccount() {
                IsVerified = false;
                Tag        = Status.Inactive;
+               IsDeleted  = false;
           }
           [Required]
           [StringLength(20)]
@@ -21,12 +22,13 @@ namespace XPW.NoSQLDemo.Models {
           [Required]
           public Guid XPayContactInformationId { get; set; }
           [ForeignKey("XPayContactInformationId")]
-          public XPayContactInformation XPayContactInformation { get; set; }
+          public virtual XPayContactInformation XPayContactInformation { get; set; }
           [Required]
           public Guid XPayRoleId { get; set; }
           [ForeignKey("XPayRoleId")]
-          public XPayRole XPayRole { get; set; }
+          public virtual XPayRole XPayRole { get; set; }
           public bool IsVerified { get; set; }
+          public bool IsDeleted { get; set; }
           public Status Tag { get; set; }
      }
 }
