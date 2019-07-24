@@ -17,7 +17,7 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
           public AdminRolesController() {
                Model1         = new XPayRole().GetType().Name;
                Model1FileName = AppDataFolder + "InnerAPI\\" + Model1 + ".json";
-               FileChecker<XPayAccount>.AutoCreateIfNotExists(Model1FileName);
+               FileChecker<XPayRole>.AutoCreateIfNotExists(Model1FileName);
           }
           [Route("get-all")]
           [HttpGet]
@@ -33,13 +33,13 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
           }
           [Route("save")]
           [HttpPost]
-          public async Task<XPayRole> Save(XPayRole role) {
+          public async Task<XPayRole> Save(XPayRole newData) {
                return await Task.Run(async () => {
                     try {
                          roles = await Reader<XPayRole>.JsonReaderListAsync(Model1FileName);
-                         roles.Add(role);
+                         roles.Add(newData);
                          _ = await Writer<XPayRole>.JsonWriterListAsync(roles, Model1FileName);
-                         return role;
+                         return newData;
                     } catch {
                          return null;
                     }
@@ -60,20 +60,20 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
           }
           [Route("edit")]
           [HttpPut]
-          public async Task<XPayRole> Edit(XPayRole role) {
+          public async Task<XPayRole> Edit(XPayRole updatedData) {
                return await Task.Run(async () => {
                     try {
                          roles = await Reader<XPayRole>.JsonReaderListAsync(Model1FileName);
                          if (roles.Count == 0) {
                               throw new Exception("No data to be update");
                          }
-                         var old = roles.Where(a => a.Id.Equals(role.Id)).FirstOrDefault();
+                         var old = roles.Where(a => a.Id.Equals(updatedData.Id)).FirstOrDefault();
                          if (old == null) {
                               throw new Exception("No data to be update");
                          }
-                         roles               = roles.Where(a => !a.Id.Equals(role.Id)).ToList();
-                         role.DateUpdated     = DateTime.Now;
-                         roles.Add(role);
+                         roles               = roles.Where(a => !a.Id.Equals(updatedData.Id)).ToList();
+                         updatedData.DateUpdated     = DateTime.Now;
+                         roles.Add(updatedData);
                          _ = await Writer<XPayRole>.JsonWriterListAsync(roles, Model1FileName);
                          return old;
                     } catch (Exception ex){

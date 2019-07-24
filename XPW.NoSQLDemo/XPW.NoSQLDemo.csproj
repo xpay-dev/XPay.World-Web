@@ -93,10 +93,15 @@
     <Compile Include="Configurations\BaseAPIController.cs" />
     <Compile Include="Configurations\DataTable.cs" />
     <Compile Include="Controllers\InnerAPI\AdminAccountsController.cs" />
+    <Compile Include="Controllers\InnerAPI\AdminBusinessTypesController.cs" />
     <Compile Include="Controllers\InnerAPI\AdminContactInformationController.cs" />
+    <Compile Include="Controllers\InnerAPI\AdminMerchantCategoriesController.cs" />
     <Compile Include="Controllers\InnerAPI\AdminRolesController.cs" />
     <Compile Include="Controllers\OuterAPI\AccountsController.cs" />
+    <Compile Include="Controllers\OuterAPI\BusinessTypesController.cs" />
+    <Compile Include="Controllers\OuterAPI\ClientsBusinessInformationController.cs" />
     <Compile Include="Controllers\OuterAPI\ContactInformationController.cs" />
+    <Compile Include="Controllers\OuterAPI\MerchantCategoriesController.cs" />
     <Compile Include="Controllers\OuterAPI\RolesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

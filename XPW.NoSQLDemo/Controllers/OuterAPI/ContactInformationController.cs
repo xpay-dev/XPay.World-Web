@@ -33,20 +33,20 @@ namespace XPW.NoSQLDemo.Controllers.InnerAPI {
           }
           [Route("edit")]
           [HttpPut]
-          public async Task<ClientsContactInformation> Edit(ClientsContactInformation _contactInformation) {
+          public async Task<ClientsContactInformation> Edit(ClientsContactInformation updatedData) {
                return await Task.Run(async () => {
                     try {
                          contactInformation = await Reader<ClientsContactInformation>.JsonReaderListAsync(Model1FileName);
                          if (contactInformation.Count == 0) {
                               throw new Exception("No data to be update");
                          }
-                         var old = contactInformation.Where(a => a.Id.Equals(_contactInformation.Id)).FirstOrDefault();
+                         var old = contactInformation.Where(a => a.Id.Equals(updatedData.Id)).FirstOrDefault();
                          if (old == null) {
                               throw new Exception("No data to be update");
                          }
-                         contactInformation = contactInformation.Where(a => !a.Id.Equals(_contactInformation.Id)).ToList();
-                         _contactInformation.DateUpdated = DateTime.Now;
-                         contactInformation.Add(_contactInformation);
+                         contactInformation = contactInformation.Where(a => !a.Id.Equals(updatedData.Id)).ToList();
+                         updatedData.DateUpdated = DateTime.Now;
+                         contactInformation.Add(updatedData);
                          _ = await Writer<ClientsContactInformation>.JsonWriterListAsync(contactInformation, Model1FileName);
                          return old;
                     } catch (Exception ex) {

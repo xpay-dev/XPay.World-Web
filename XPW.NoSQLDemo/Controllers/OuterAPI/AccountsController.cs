@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using XPW.NoSQLDemo.Configurations;
@@ -23,7 +21,8 @@ namespace XPW.NoSQLDemo.Controllers.OuterAPI {
                Model1FileName = AppDataFolder + "InnerAPI\\" + Model1 + ".json";
                Model2 = new ClientsRole().GetType().Name;
                Model2FileName = AppDataFolder + "InnerAPI\\" + Model2 + ".json";
-               FileChecker<ClientsAccount>.AutoCreateIfNotExists(Model2FileName);
+               FileChecker<ClientsRole>.AutoCreateIfNotExists(Model2FileName);
+               FileChecker<ClientsAccount>.AutoCreateIfNotExists(Model1FileName);
           }
           [Route("get-all")]
           [HttpGet]
@@ -39,15 +38,15 @@ namespace XPW.NoSQLDemo.Controllers.OuterAPI {
           }
           [Route("save")]
           [HttpPost]
-          public async Task<ClientsAccount> Save(ClientsAccount account) {
+          public async Task<ClientsAccount> Save(ClientsAccount newData) {
                return await Task.Run(async () => {
                     try {
                          accounts = await Reader<ClientsAccount>.JsonReaderListAsync(Model1FileName);
-                         accounts.Add(account);
+                         accounts.Add(newData);
                          _ = await Writer<ClientsAccount>.JsonWriterListAsync(accounts, Model1FileName);
-                         return account;
+                         return newData;
                     } catch {
-                         return account;
+                         return newData;
                     }
                });
           }
@@ -69,22 +68,22 @@ namespace XPW.NoSQLDemo.Controllers.OuterAPI {
           }
           [Route("edit")]
           [HttpPut]
-          public async Task<ClientsAccount> Edit(ClientsAccount account) {
+          public async Task<ClientsAccount> Edit(ClientsAccount updatedData) {
                return await Task.Run(async () => {
                     try {
                          accounts = await Reader<ClientsAccount>.JsonReaderListAsync(Model1FileName);
                          if (accounts.Count == 0) {
                               throw new Exception("No data to be update");
                          }
-                         var old = accounts.Where(a => a.Id.Equals(account.Id)).ToList();
+                         var old = accounts.Where(a => a.Id.Equals(updatedData.Id)).ToList();
                          if (old == null) {
                               throw new Exception("No data to be update");
                          }
-                         accounts = accounts.Where(a => !a.Id.Equals(account.Id)).ToList();
-                         account.DateUpdated = DateTime.Now;
-                         accounts.Add(account);
+                         accounts = accounts.Where(a => !a.Id.Equals(updatedData.Id)).ToList();
+                         updatedData.DateUpdated = DateTime.Now;
+                         accounts.Add(updatedData);
                          _ = await Writer<ClientsAccount>.JsonWriterListAsync(accounts, Model1FileName);
-                         return account;
+                         return updatedData;
                     } catch {
                          return null;
                     }
