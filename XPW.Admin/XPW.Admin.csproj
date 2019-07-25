@@ -97,14 +97,6 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Configurations\Base\BaseController.cs" />
-    <Compile Include="Configurations\DataContext\XPWAdminContext.cs" />
-    <Compile Include="Configurations\Entities\Account.cs" />
-    <Compile Include="Configurations\Entities\AccountInformation.cs" />
-    <Compile Include="Configurations\Entities\ApplicationAccess.cs" />
-    <Compile Include="Configurations\Entities\ApplicationUserAccess.cs" />
-    <Compile Include="Configurations\Entities\Role.cs" />
-    <Compile Include="Configurations\Repositories\Repositories.cs" />
-    <Compile Include="Configurations\Services\AccountService.cs" />
     <Compile Include="Controllers\AccountInfornationController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\ApplicationAccessesController.cs" />
@@ -115,15 +107,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XPWAdminContextMigration\201907241404565_NewTable_07242018_2204.cs" />
-    <Compile Include="XPWAdminContextMigration\201907241404565_NewTable_07242018_2204.Designer.cs">
-      <DependentUpon>201907241404565_NewTable_07242018_2204.cs</DependentUpon>
-    </Compile>
-    <Compile Include="XPWAdminContextMigration\201907251306549_PagePermission_07252019_2106.cs" />
-    <Compile Include="XPWAdminContextMigration\201907251306549_PagePermission_07252019_2106.Designer.cs">
-      <DependentUpon>201907251306549_PagePermission_07252019_2106.cs</DependentUpon>
-    </Compile>
-    <Compile Include="XPWAdminContextMigration\Configuration.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -144,14 +127,6 @@
       <Project>{65b824d3-809d-4d8a-bcff-521e010c85f2}</Project>
       <Name>XPW.CommonData</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XPWAdminContextMigration\201907241404565_NewTable_07242018_2204.resx">
-      <DependentUpon>201907241404565_NewTable_07242018_2204.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="XPWAdminContextMigration\201907251306549_PagePermission_07252019_2106.resx">
-      <DependentUpon>201907251306549_PagePermission_07252019_2106.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
