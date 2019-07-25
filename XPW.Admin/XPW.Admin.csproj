@@ -96,12 +96,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Configurations\Base\BaseController.cs" />
     <Compile Include="Configurations\DataContext\XPWAdminContext.cs" />
     <Compile Include="Configurations\Entities\Account.cs" />
     <Compile Include="Configurations\Entities\AccountInformation.cs" />
     <Compile Include="Configurations\Entities\Role.cs" />
     <Compile Include="Configurations\Repositories\Repositories.cs" />
     <Compile Include="Configurations\Services\AccountService.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -125,7 +127,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="App_Models\Request\" />
     <Folder Include="App_Models\Response\" />
-    <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XPW.CommonData\XPW.CommonData.csproj">
@@ -153,7 +154,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>53765</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44314/</IISUrl>
+          <IISUrl>https://localhost:44314/admin/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

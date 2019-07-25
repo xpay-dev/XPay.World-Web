@@ -10,8 +10,8 @@ namespace XPW.Admin {
 
                config.Routes.MapHttpRoute(
                    name: "DefaultApi",
-                   routeTemplate: "api/{controller}/{id}",
-                   defaults: new { id = RouteParameter.Optional }
+                   routeTemplate: "{controller}/{action}/{id}",
+                   defaults: new { id = RouteParameter.Optional, token = RouteParameter.Optional }
                );
 
                var json = config.Formatters.JsonFormatter;
