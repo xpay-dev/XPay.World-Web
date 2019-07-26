@@ -10,7 +10,7 @@ using XPW.CommonData.XPWExternal.Services;
 
 namespace XPW.Admin.Controllers {
      [RoutePrefix("test")]
-     public class TestController : BaseController {
+     public class TestController : ApiController {
           [Route("{token}/token")]
           [HttpGet]
           public string Token() {

@@ -3,6 +3,6 @@ using XPW.Admin.Configurations.Base;
 
 namespace XPW.Admin.Controllers {
      [RoutePrefix("application-accesses")]
-     public class ApplicationAccessesController : BaseController {
+     public class ApplicationAccessesController : ApiController {
      }
 }
