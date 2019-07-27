@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CryptoManagement">
-      <HintPath>..\..\xPayUtility\CryptoManagement\bin\Release\CryptoManagement.dll</HintPath>
+    <Reference Include="CryptoManagement, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\xPayUtility\XPW.Utilities\bin\Release\CryptoManagement.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -43,7 +44,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="XPW.Utilities">
+    <Reference Include="XPW.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\xPayUtility\XPW.Utilities\bin\Release\XPW.Utilities.dll</HintPath>
     </Reference>
   </ItemGroup>

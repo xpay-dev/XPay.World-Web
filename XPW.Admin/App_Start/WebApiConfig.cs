@@ -1,12 +1,14 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Routing;
 
 namespace XPW.Admin {
      public static class WebApiConfig {
           public static void Register(HttpConfiguration config) {
-               // Web API configuration and services
 
-               // Web API routes
-               config.MapHttpAttributeRoutes();
+               //config.MapHttpAttributeRoutes();
+               config.MapHttpAttributeRoutes(new WebApiCustomDirectRouteProvider());
 
                config.Routes.MapHttpRoute(
                    name: "DefaultApi",
@@ -18,6 +20,11 @@ namespace XPW.Admin {
                json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
                config.Formatters.Remove(config.Formatters.XmlFormatter);
                json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+          }
+     }
+     public class WebApiCustomDirectRouteProvider : DefaultDirectRouteProvider {
+          protected override IReadOnlyList<IDirectRouteFactory> GetActionRouteFactories(HttpActionDescriptor actionDescriptor) {
+               return actionDescriptor.GetCustomAttributes<IDirectRouteFactory>(inherit: true);
           }
      }
 }
