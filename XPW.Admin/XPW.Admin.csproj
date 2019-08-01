@@ -96,14 +96,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Models\Request\RoleModel.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Configurations\Base\BaseController.cs" />
     <Compile Include="Controllers\AccountInfornationController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\ApplicationAccessesController.cs" />
     <Compile Include="Controllers\ApplicationUserAccessesController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -120,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="App_Models\Request\" />
     <Folder Include="App_Models\Response\" />
   </ItemGroup>
   <ItemGroup>
