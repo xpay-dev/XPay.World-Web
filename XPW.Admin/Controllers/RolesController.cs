@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http;
 using XPW.Admin.App_Models.Request;
@@ -7,6 +9,7 @@ using XPW.CommonData.XPWAdmin.DataContext;
 using XPW.CommonData.XPWAdmin.Entities;
 using XPW.Utilities.BaseContextManagement;
 using XPW.Utilities.Filtering;
+using XPW.Utilities.Logs;
 using XPW.Utilities.UtilityModels;
 
 namespace XPW.Admin.Controllers {
@@ -27,8 +30,23 @@ namespace XPW.Admin.Controllers {
                          }
                          role = Service.SaveReturn(new Role { Name = apiModel.Name, Order = apiModel.Order });
                     } catch (Exception ex) {
-                         ErrorMessage = ex.Message;
-                         ErrorDetails.Add(ex.Message);
+                         string message = ex.Message + (ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
+                         ErrorDetails.Add(message);
+                         ErrorMessage        = message;
+                         MethodBase m        = MethodBase.GetCurrentMethod();
+                         StackTrace trace    = new StackTrace(ex, true);
+                         string sourceFile   = trace.GetFrame(0).GetFileName();
+                         ErrorLogs.Write(new ErrorLogsModel {
+                              Application    = Assembly.GetExecutingAssembly().GetName().Name,
+                              Controller     = GetType().Name,
+                              CurrentAction  = m.Name.Split('>')[0].TrimStart('<'),
+                              ErrorCode      = ErrorCode,
+                              Message        = message,
+                              SourceFile     = sourceFile,
+                              LineNumber     = trace.GetFrame(0).GetFileLineNumber(),
+                              StackTrace     = ex.ToString(),
+                              Method         = m.Name.Split('>')[0].TrimStart('<')
+                         }, ex);
                     }
                     return new GenericResponseModel<Role>() {
                          Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
@@ -80,8 +98,23 @@ namespace XPW.Admin.Controllers {
                          role.DateUpdated    = DateTime.Now;
                          role                = Service.UpdateReturn(role);
                     } catch (Exception ex) {
-                         ErrorMessage = ex.Message;
-                         ErrorDetails.Add(ex.Message);
+                         string message = ex.Message + (!string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
+                         ErrorDetails.Add(message);
+                         ErrorMessage        = message;
+                         MethodBase m        = MethodBase.GetCurrentMethod();
+                         StackTrace trace    = new StackTrace(ex, true);
+                         string sourceFile   = trace.GetFrame(0).GetFileName();
+                         ErrorLogs.Write(new ErrorLogsModel {
+                              Application    = Assembly.GetExecutingAssembly().GetName().Name,
+                              Controller     = GetType().Name,
+                              CurrentAction  = m.Name.Split('>')[0].TrimStart('<'),
+                              ErrorCode      = ErrorCode,
+                              Message        = message,
+                              SourceFile     = sourceFile,
+                              LineNumber     = trace.GetFrame(0).GetFileLineNumber(),
+                              StackTrace     = ex.ToString(),
+                              Method         = m.Name.Split('>')[0].TrimStart('<')
+                         }, ex);
                     }
                     return new GenericResponseModel<Role>() {
                          Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
