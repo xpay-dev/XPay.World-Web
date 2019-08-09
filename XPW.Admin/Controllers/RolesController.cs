@@ -8,18 +8,23 @@ using XPW.Admin.App_Models.Request;
 using XPW.CommonData.XPWAdmin.DataContext;
 using XPW.CommonData.XPWAdmin.Entities;
 using XPW.Utilities.BaseContextManagement;
+using XPW.Utilities.DatabaseValidation;
 using XPW.Utilities.Filtering;
+using XPW.Utilities.HeaderValidations;
 using XPW.Utilities.Logs;
 using XPW.Utilities.UtilityModels;
 
 namespace XPW.Admin.Controllers {
+     [Serializable]
      [RoutePrefix("roles")]
+     [Authorization]
+     [DatabaseConnectionValidation("XPWAdmin")]
      public class RolesController : BaseServiceController<Role, XPWAdminContext> {
           [Route("save")]
           [HttpPost]
           [RequestFiltering]
           public async Task<GenericResponseModel<Role>> Save([FromBody]RoleModel apiModel) {
-               return await Task.Run(() => {
+               return await Task.Run(async () => {
                     Role role = new Role();
                     ErrorCode = "800.4";
                     try {
@@ -28,7 +33,7 @@ namespace XPW.Admin.Controllers {
                               ErrorCode = "800.41";
                               throw new Exception(apiModel.Name + " was already exist!");
                          }
-                         role = Service.SaveReturn(new Role { Name = apiModel.Name, Order = apiModel.Order });
+                         role = await Service.SaveReturnAsync(new Role { Name = apiModel.Name, Order = apiModel.Order });
                     } catch (Exception ex) {
                          string message = ex.Message + (ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
                          ErrorDetails.Add(message);
@@ -64,7 +69,7 @@ namespace XPW.Admin.Controllers {
           [HttpPut]
           [RequestFiltering]
           public async Task<GenericResponseModel<Role>> Update([FromUri]int id, [FromBody]RoleModel apiModel) {
-               return await Task.Run(() => {
+               return await Task.Run(async () => {
                     Role role = new Role();
                     ErrorCode = "800.5";
                     try {
@@ -96,7 +101,7 @@ namespace XPW.Admin.Controllers {
                          role.Name           = apiModel.Name;
                          role.Order          = apiModel.Order;
                          role.DateUpdated    = DateTime.Now;
-                         role                = Service.UpdateReturn(role);
+                         role                = await Service.UpdateReturnAsync(role);
                     } catch (Exception ex) {
                          string message = ex.Message + (!string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
                          ErrorDetails.Add(message);
