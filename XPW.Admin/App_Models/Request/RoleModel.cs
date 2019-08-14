@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace XPW.Admin.App_Models.Request {
+     [Serializable]
      public class RoleModel {
           public int Id { get; set; }
           [Required(ErrorMessage = "Name is required")]
