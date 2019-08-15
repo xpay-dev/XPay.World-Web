@@ -62,6 +62,7 @@
     <Compile Include="XPWAdmin\Entities\ApplicationUserAccess.cs" />
     <Compile Include="XPWAdmin\Entities\Role.cs" />
     <Compile Include="XPWAdmin\Repositories\Repositories.cs" />
+    <Compile Include="XPWAdmin\Services\AccountInformationService.cs" />
     <Compile Include="XPWAdmin\Services\AccountService.cs" />
     <Compile Include="XPWAdmin\Services\RoleService.cs" />
     <Compile Include="XPWExternalMigration\201907251340536_XPWExternal.Initial.cs" />

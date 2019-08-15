@@ -15,7 +15,6 @@ using XPW.Utilities.Logs;
 using XPW.Utilities.UtilityModels;
 
 namespace XPW.Admin.Controllers {
-     [Serializable]
      [RoutePrefix("roles")]
      [Authorization]
      [DatabaseConnectionValidation("XPWAdmin")]
@@ -23,17 +22,22 @@ namespace XPW.Admin.Controllers {
           [Route("save")]
           [HttpPost]
           [RequestFiltering]
-          public async Task<GenericResponseModel<Role>> Save([FromBody]RoleModel apiModel) {
+          public async Task<GenericResponseModel<RoleModel>> Save([FromBody]RoleModel viewModel) {
                return await Task.Run(async () => {
                     Role role = new Role();
                     ErrorCode = "800.4";
                     try {
                          var roles = Service.GetAll().ToList();
-                         if (roles.Where(a => a.Name.ToLower() == apiModel.Name.ToLower()).FirstOrDefault() != null) {
-                              ErrorCode = "800.41";
-                              throw new Exception(apiModel.Name + " was already exist!");
+                         if (roles != null) {
+                              if (roles.Count > 0) {
+                                   if (roles.Where(a => a.Name.ToLower() == viewModel.Name.ToLower()).FirstOrDefault() != null) {
+                                        ErrorCode = "800.41";
+                                        throw new Exception(viewModel.Name + " was already exist!");
+                                   }
+                              }
                          }
-                         role = await Service.SaveReturnAsync(new Role { Name = apiModel.Name, Order = apiModel.Order });
+                         role = new Role { Name = viewModel.Name, Order = viewModel.Order };
+                         role = await Service.SaveReturnAsync(role);
                     } catch (Exception ex) {
                          string message = ex.Message + (ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
                          ErrorDetails.Add(message);
@@ -53,10 +57,10 @@ namespace XPW.Admin.Controllers {
                               Method         = m.Name.Split('>')[0].TrimStart('<')
                          }, ex);
                     }
-                    return new GenericResponseModel<Role>() {
+                    return new GenericResponseModel<RoleModel>() {
                          Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
                          CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
-                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? role : null,
+                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? viewModel : null,
                          ErrorMessage        = string.IsNullOrEmpty(ErrorMessage) ? null : new ErrorMessage {
                               Details        = ErrorDetails,
                               ErrNumber      = ErrorCode,
@@ -68,7 +72,7 @@ namespace XPW.Admin.Controllers {
           [Route("update/{id}")]
           [HttpPut]
           [RequestFiltering]
-          public async Task<GenericResponseModel<Role>> Update([FromUri]int id, [FromBody]RoleModel apiModel) {
+          public async Task<GenericResponseModel<Role>> Update([FromUri]int id, [FromBody]RoleModel viewModel) {
                return await Task.Run(async () => {
                     Role role = new Role();
                     ErrorCode = "800.5";
@@ -83,7 +87,7 @@ namespace XPW.Admin.Controllers {
                               ErrorCode = "800.51";
                               throw new Exception("Invalid data reference.");
                          }
-                         if (id != apiModel.Id) {
+                         if (id != viewModel.Id) {
                               ErrorCode = "800.52";
                               throw new Exception("Invalid data reference. Data didn't match.");
                          }
@@ -92,14 +96,14 @@ namespace XPW.Admin.Controllers {
                               ErrorCode = "800.53";
                               throw new Exception("Invalid data reference. No data found.");
                          }
-                         var roles = Service.GetAll().Where(a => a.Id != apiModel.Id).ToList();
-                         role      = roles.Where(a => a.Name.ToLower() == apiModel.Name.ToLower()).FirstOrDefault();
+                         var roles = Service.GetAll().Where(a => a.Id != viewModel.Id).ToList();
+                         role      = roles.Where(a => a.Name.ToLower() == viewModel.Name.ToLower()).FirstOrDefault();
                          if (role != null) {
                               ErrorCode = "800.54";
-                              throw new Exception(apiModel.Name + " was already exist!");
+                              throw new Exception(viewModel.Name + " was already exist!");
                          }
-                         role.Name           = apiModel.Name;
-                         role.Order          = apiModel.Order;
+                         role.Name           = role.Name;
+                         role.Order          = viewModel.Order;
                          role.DateUpdated    = DateTime.Now;
                          role                = await Service.UpdateReturnAsync(role);
                     } catch (Exception ex) {
