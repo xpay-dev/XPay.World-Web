@@ -50,11 +50,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XPWAdminMigration\201907251334270_XPWAdmin.Initial.cs" />
-    <Compile Include="XPWAdminMigration\201907251334270_XPWAdmin.Initial.Designer.cs">
-      <DependentUpon>201907251334270_XPWAdmin.Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="XPWAdminMigration\Configuration.cs" />
     <Compile Include="XPWAdmin\DataContext\XPWAdminContext.cs" />
     <Compile Include="XPWAdmin\Entities\Account.cs" />
     <Compile Include="XPWAdmin\Entities\AccountInformation.cs" />
@@ -65,11 +60,6 @@
     <Compile Include="XPWAdmin\Services\AccountInformationService.cs" />
     <Compile Include="XPWAdmin\Services\AccountService.cs" />
     <Compile Include="XPWAdmin\Services\RoleService.cs" />
-    <Compile Include="XPWExternalMigration\201907251340536_XPWExternal.Initial.cs" />
-    <Compile Include="XPWExternalMigration\201907251340536_XPWExternal.Initial.Designer.cs">
-      <DependentUpon>201907251340536_XPWExternal.Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="XPWExternalMigration\Configuration.cs" />
     <Compile Include="XPWExternal\DataContext\XPWExternalContext.cs" />
     <Compile Include="XPWExternal\Entities\PasswordHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,14 +73,6 @@
     <PackageReference Include="EntityFramework">
       <Version>6.2.0</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XPWAdminMigration\201907251334270_XPWAdmin.Initial.resx">
-      <DependentUpon>201907251334270_XPWAdmin.Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="XPWExternalMigration\201907251340536_XPWExternal.Initial.resx">
-      <DependentUpon>201907251340536_XPWExternal.Initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

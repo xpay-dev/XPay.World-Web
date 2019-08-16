@@ -2,14 +2,18 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 using System.Web.Http;
 using XPW.Admin.App_Models.Request;
 using XPW.CommonData.XPWAdmin.DataContext;
 using XPW.CommonData.XPWAdmin.Entities;
+using XPW.Utilities.AppConfigManagement;
 using XPW.Utilities.BaseContextManagement;
 using XPW.Utilities.DatabaseValidation;
 using XPW.Utilities.Filtering;
+using XPW.Utilities.Functions;
 using XPW.Utilities.HeaderValidations;
 using XPW.Utilities.Logs;
 using XPW.Utilities.UtilityModels;
@@ -19,13 +23,17 @@ namespace XPW.Admin.Controllers {
      [Authorization]
      [DatabaseConnectionValidation("XPWAdmin")]
      public class AccountsController : BaseServiceController<Account, XPWAdminContext> {
+          internal static readonly AppConfig appConfigManager = new AppConfig(HostingEnvironment.ApplicationPhysicalPath + "App_Settings", "appConfig.json");
           [Route("save")]
           [HttpPost]
           [RequestFiltering]
           public async Task<GenericResponseModel<AccountModel>> Save([FromBody]AccountModel viewModel) {
                return await Task.Run(async () => {
-                    AccountInformation accountInfo = new AccountInformation();
-                    Account account = new Account();
+                    AccountInformation accountInfo     = new AccountInformation();
+                    Account account                    = new Account();
+                    bool passwordGenerate              = appConfigManager.AppSetting<bool>("PasswordAutoGenerator", true, new AppConfigSettingsModel { Value = "false", Group = "Admin" });
+                    bool useDefaultPassword            = appConfigManager.AppSetting<bool>("UseDefaultPassword", true, new AppConfigSettingsModel { Value = "false", Group = "Admin" });
+                    string defaultPassword             = appConfigManager.AppSetting<string>("DefaultPassword", true, new AppConfigSettingsModel { Value = "patCHES214#", Group = "Admin" });
                     ErrorCode = "800.4";
                     try {
                          var accounts = Service.GetAll().ToList();
@@ -37,6 +45,21 @@ namespace XPW.Admin.Controllers {
                                    }
                               }
                          }
+                         if (!passwordGenerate) {
+                              if (string.IsNullOrEmpty(viewModel.Password)) {
+                                   ErrorCode = "800.42";
+                                   throw new Exception("Password: cannot be null or empty");
+                              }
+                              if (viewModel.Password.Length < 8) {
+                                   ErrorCode = "800.43";
+                                   throw new Exception("Password: string length is invalid, must be 8 characters and up");
+                              }
+                              var textString = Regex.IsMatch(viewModel.Password.Trim(), @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$_@=|{}+!#<>])[a-zA-Z0-9$_@=|{}+!#<>]{8,50}");
+                              if (!textString) {
+                                   ErrorCode = "800.44";
+                                   throw new Exception("Password: must be have at least one (1) Upper case letter, one (1) lower case letter, a number and/or a special character");
+                              }
+                         }
                          accountInfo = new AccountInformation {
                               Address1       = viewModel.Address1,
                               Address2       = viewModel.Address2,
@@ -46,7 +69,7 @@ namespace XPW.Admin.Controllers {
                               FirstName      = viewModel.FirstName,
                               LastName       = viewModel.LastName,
                               MiddleName     = viewModel.MiddleName,
-                              MobileNumber   = viewModel.MobileNumber,
+                              MobileNumber   = viewModel.MobileNumber,     
                               Province_State = viewModel.Province_State,
                               ZipCode        = viewModel.ZipCode
                          };
@@ -55,7 +78,7 @@ namespace XPW.Admin.Controllers {
                               EmailAddress             = viewModel.EmailAddress,
                               RoleId                   = viewModel.RoleId,
                               Username                 = viewModel.Username,
-                              Password                 = crypto.Encrypt(viewModel.Password),
+                              Password                 = crypto.Encrypt((passwordGenerate ? (useDefaultPassword ? defaultPassword : Generator.StringGenerator(10)) : viewModel.Password)),
                               AccountInformation       = accountInfo,
                          };
                          account = await Service.SaveReturnAsync(account);

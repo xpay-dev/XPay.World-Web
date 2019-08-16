@@ -121,6 +121,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="App_Models\Response\" />
+    <Folder Include="App_Settings\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XPW.CommonData\XPW.CommonData.csproj">

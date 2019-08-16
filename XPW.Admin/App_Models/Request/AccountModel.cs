@@ -10,15 +10,12 @@ namespace XPW.Admin.App_Models.Request {
           [Required]
           [StringLength(60)]
           public string EmailAddress { get; set; }
-          [Required]
           public string Password { get; set; }
           [Required]
           public int RoleId { get; set; }
           [Required]
           [StringLength(20)]
           public string FirstName { get; set; }
-          [Required]
-          [StringLength(20)]
           public string MiddleName { get; set; }
           [Required]
           [StringLength(20)]
@@ -32,8 +29,6 @@ namespace XPW.Admin.App_Models.Request {
           [Required]
           [StringLength(100)]
           public string Address1 { get; set; }
-          [Required]
-          [StringLength(100)]
           public string Address2 { get; set; }
           [Required]
           [StringLength(50)]

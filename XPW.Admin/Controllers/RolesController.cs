@@ -38,6 +38,7 @@ namespace XPW.Admin.Controllers {
                          }
                          role = new Role { Name = viewModel.Name, Order = viewModel.Order };
                          role = await Service.SaveReturnAsync(role);
+                         viewModel.Id = role.Id;
                     } catch (Exception ex) {
                          string message = ex.Message + (ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
                          ErrorDetails.Add(message);

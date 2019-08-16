@@ -8,8 +8,6 @@ namespace XPW.CommonData.XPWAdmin.Entities {
           [Required]
           [StringLength(20)]
           public string FirstName { get; set; }
-          [Required]
-          [StringLength(20)]
           public string MiddleName { get; set; }
           [Required]
           [StringLength(20)]
@@ -23,8 +21,6 @@ namespace XPW.CommonData.XPWAdmin.Entities {
           [Required]
           [StringLength(100)]
           public string Address1 { get; set; }
-          [Required]
-          [StringLength(100)]
           public string Address2 { get; set; }
           [Required]
           [StringLength(50)]
