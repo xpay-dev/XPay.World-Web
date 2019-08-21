@@ -93,14 +93,15 @@ namespace XPW.Admin.Controllers {
                          account        = await Service.SaveReturnAsync(account);
                          account.Role   = await roleService.Get(account.RoleId);               
                          await accountService.GenerateUserJsonData(account);
-                         string token   = accountService.ActivationTokenGenerator(account, crypto.Decrypt(encryptedPassword));
+                         string token   = Checker.NumberExtractor(account.Id.ToString()) + "-" + account.AccountInformationId.ToString();
                          string url     = appConfigManager.AppSetting<string>("AdminActivationURL", true, new AppConfigSettingsModel { Value = "https:\\\\localhost:9909\\Admin\\Token\\Activate?token=", Group = "Admin" });
                          url            += token;
-                         await accountService.AccountEmail(account, "XPay.World Registration", url);
+                         bool isSend    = await accountService.AccountEmail(account, "XPay.World Registration", url);
                          viewModel.Id                   = account.Id;
                          viewModel.AccountInformationId = account.AccountInformationId;
                          viewModel.Password             = string.Empty;
                          viewModel.Token                = token;
+                         viewModel.TokenExpiry          = account.DateCreated.AddMinutes(70);
                     } catch (Exception ex) {
                          string message = ex.Message + (ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
                          ErrorDetails.Add(message);
@@ -440,16 +441,16 @@ namespace XPW.Admin.Controllers {
                     };
                });
           }
-          [Route("token-validator/{token}")]
+          [Route("account-confirmation/{token}")]
           [HttpPut]
-          public async Task<GenericResponseModel<AccountActivationModel>> TokenValidator(string token) {
+          public async Task<GenericResponseModel<AccountActivationModel>> AccountConfirmation(string token) {
                return await Task.Run(async () => {
-                    var viewModel = new AccountActivationModel();
+                    var accountActivation = new AccountActivationModel();
                     try {
                          ErrorCode = "800.9";
-                         var response = await accountService.ActivationTokenValidator(token);
+                         var response = await accountService.ActivationPasscodeTokenValidator(token);
                          response.Item1.Password = string.Empty;
-                         viewModel = new AccountActivationModel { Account = response.Item1, IsValidated = response.Item2, Message = response.Item3 };
+                         accountActivation = new AccountActivationModel { Username = response.Item1.Username, IsValidated = response.Item2, Message = response.Item3 };
                     } catch (Exception ex) {
                          string message           = ex.Message + (!string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
                          ErrorDetails.Add(message);
@@ -472,7 +473,7 @@ namespace XPW.Admin.Controllers {
                     return new GenericResponseModel<AccountActivationModel>() {
                          Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
                          CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
-                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? viewModel  : null,
+                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? accountActivation : null,
                          ErrorMessage        = string.IsNullOrEmpty(ErrorMessage) ? null : new ErrorMessage {
                               Details        = ErrorDetails,
                               ErrNumber      = ErrorCode,

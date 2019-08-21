@@ -11,6 +11,7 @@ using XPW.CommonData.XPWAdmin.Repositories;
 using XPW.Utilities.BaseContext;
 using XPW.Utilities.CryptoHashingManagement;
 using XPW.Utilities.EmailManagement;
+using XPW.Utilities.Functions;
 using XPW.Utilities.NoSQL;
 using XPW.Utilities.UtilityModels;
 
@@ -35,7 +36,7 @@ namespace XPW.CommonData.XPWAdmin.ervices {
                     }
                });
           }
-          public async Task AccountEmail(Account account, string subject, string applicationUrl) {
+          public async Task<bool> AccountEmail(Account account, string subject, string applicationUrl) {
                try {
                     List<EmailManagementodelReceipientModel> receipients = new List<EmailManagementodelReceipientModel>();
                     string displayName = account.AccountInformation.FirstName + (!string.IsNullOrEmpty(account.AccountInformation.MiddleName) ? " " + account.AccountInformation.MiddleName : string.Empty) + " " + account.AccountInformation.LastName;
@@ -44,8 +45,9 @@ namespace XPW.CommonData.XPWAdmin.ervices {
                          Email = account.EmailAddress
                     });
                     string htmlBody = "<html><body><h1>Welcome to XPay.World!</h1><br><br><br>"
-                      + "To activate your account, please click <a heref=\"" + applicationUrl + "\"><strong>here</strong></a> to confirm your account.<br /><br />"
+                      + "To activate your account, please login <a heref=\"" + applicationUrl + "\"><strong>here</strong></a> to confirm your account.<br /><br />"
                       + "Your Username was :" + "<b>" + account.Username + "</b>" + "<br />"
+                      + "Your Password was :" + "<b>" + crypto.Decrypt(account.Password) + "</b>" + "<br />"
                       + "If you need any assistance, please feel free to contact us at <a href=\"mailto:support-admin@xpay.world\">support-admin@xpay.world</a><br /><br /><br />"
                       + "*This email contains important and confidential information about your XPay.World Account, please save this message for future reference.<br /><br /><br />"
                       + "**Activation of account will gonna expired in one hour after receiving this email.<br />"
@@ -61,8 +63,9 @@ namespace XPW.CommonData.XPWAdmin.ervices {
                               EmailContent = AlternateView.CreateAlternateViewFromString(htmlBody, null, MediaTypeNames.Text.Html)
                          }, "Admin", "Default");
                     });
+                    return true;
                } catch (Exception ex) {
-                    return;
+                    return false;
                }
           }
           public string ActivationTokenGenerator(Account account, string password) {
@@ -101,6 +104,65 @@ namespace XPW.CommonData.XPWAdmin.ervices {
                          account = await base.UpdateReturnAsync(account);
                          return new Tuple<Account, bool, string>(account, true, "Validated");
                     } catch (Exception ex){
+                         return new Tuple<Account, bool, string>(null, false, ex.Message);
+                    }
+               });
+          }
+
+          public async Task<Tuple<Account, bool, string>> ActivationPasscodeTokenValidator(string activator) {
+               return await Task.Run(async () => {
+                    try {
+                         List<Account> accounts = base.GetAll().ToList();
+                         List<string> passcodes = new List<string>();
+                         if (accounts == null) {
+                              throw new Exception("Sorry, account not found");
+                         }
+                         if (accounts.Count == 0) {
+                              throw new Exception("Sorry, account not found");
+                         }
+                         accounts.ForEach(a => {
+                              passcodes.Add(a.Id + "=" + Checker.NumberExtractor(a.Id.ToString()) + "-" + a.AccountInformationId.ToString());
+                         });
+                         string passcodeId1 = string.Empty;
+                         string passcodeId2 = string.Empty;
+                         string[] passcodeArray = passcodes.ToArray();
+                         for(int i = 0; i < passcodes.Count; i++) {
+                              string[] values = passcodeArray[i].Split('=');
+                              if (!string.IsNullOrEmpty(passcodeId1)) {
+                                   break;
+                              } else {
+                                   if (values[1] == activator) {
+                                        passcodeId1 = values[0];
+                                        passcodeId2 = values[1].Split('-')[1];
+                                   }
+                              }
+                         };
+                         if (string.IsNullOrEmpty(passcodeId1)) {
+                              throw new Exception("Sorry, account not found");
+                         }
+                         Account account = await Get(Guid.Parse(passcodeId1));
+                         if (account == null) {
+                         }
+                         if (account.IsDeleted) {
+                              throw new Exception("Sorry, account not found");
+                         }
+                         if (account.IsVerified) {
+                              throw new Exception("Account was already activated");
+                         }
+                         if (account.DateCreated.AddMinutes(70) < DateTime.Now) {
+                              throw new Exception("Invalid activation Token");
+                         }
+                         if (account.DateCreated.AddMinutes(70) < DateTime.Now) {
+                              throw new Exception("Invalid activation Token");
+                         }
+                         if (account.AccountInformationId.ToString() != passcodeId2) {
+                              throw new Exception("Invalid activation Token");
+                         }
+                         account.IsVerified = true;
+                         account.DateUpdated = DateTime.Now;
+                         account = await base.UpdateReturnAsync(account);
+                         return new Tuple<Account, bool, string>(account, true, "Validated");
+                    } catch (Exception ex) {
                          return new Tuple<Account, bool, string>(null, false, ex.Message);
                     }
                });

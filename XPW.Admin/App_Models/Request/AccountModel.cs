@@ -47,6 +47,7 @@ namespace XPW.Admin.App_Models.Request {
           public DateTime DateCreated { get; set; }
           public DateTime? DateUpdated { get; set; }
           public string Token { get; set; }
+          public DateTime TokenExpiry { get; set; }
      }
      public class AccountUserModel {
           public Guid? Id { get; set; }
