@@ -98,8 +98,8 @@
   <ItemGroup>
     <Compile Include="App_Models\Request\AccountModel.cs" />
     <Compile Include="App_Models\Request\RoleModel.cs" />
+    <Compile Include="App_Models\Response\AccountActivationModel.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AccountInfornationController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\ApplicationAccessesController.cs" />
     <Compile Include="Controllers\ApplicationUserAccessesController.cs" />
@@ -120,7 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="App_Models\Response\" />
     <Folder Include="App_Settings\" />
   </ItemGroup>
   <ItemGroup>

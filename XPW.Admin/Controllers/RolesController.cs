@@ -38,7 +38,8 @@ namespace XPW.Admin.Controllers {
                          }
                          role = new Role { Name = viewModel.Name, Order = viewModel.Order };
                          role = await Service.SaveReturnAsync(role);
-                         viewModel.Id = role.Id;
+                         viewModel.Id             = role.Id;
+                         viewModel.DateCreated    = role.DateCreated;
                     } catch (Exception ex) {
                          string message = ex.Message + (ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
                          ErrorDetails.Add(message);
@@ -46,7 +47,7 @@ namespace XPW.Admin.Controllers {
                          MethodBase m        = MethodBase.GetCurrentMethod();
                          StackTrace trace    = new StackTrace(ex, true);
                          string sourceFile   = trace.GetFrame(0).GetFileName();
-                         ErrorLogs.Write(new ErrorLogsModel {
+                         await ErrorLogs.Write(new ErrorLogsModel {
                               Application    = Assembly.GetExecutingAssembly().GetName().Name,
                               Controller     = GetType().Name,
                               CurrentAction  = m.Name.Split('>')[0].TrimStart('<'),
@@ -73,7 +74,7 @@ namespace XPW.Admin.Controllers {
           [Route("update/{id}")]
           [HttpPut]
           [RequestFiltering]
-          public async Task<GenericResponseModel<Role>> Update([FromUri]int id, [FromBody]RoleModel viewModel) {
+          public async Task<GenericResponseModel<RoleModel>> Update([FromUri]int id, [FromBody]RoleModel viewModel) {
                return await Task.Run(async () => {
                     Role role = new Role();
                     ErrorCode = "800.5";
@@ -88,25 +89,36 @@ namespace XPW.Admin.Controllers {
                               ErrorCode = "800.51";
                               throw new Exception("Invalid data reference.");
                          }
-                         if (id != viewModel.Id) {
+                         if (!viewModel.Id.HasValue) {
                               ErrorCode = "800.52";
                               throw new Exception("Invalid data reference. Data didn't match.");
                          }
-                         var oldModel = Service.Get(id);
-                         if (oldModel == null) {
+                         if (id != viewModel.Id) {
                               ErrorCode = "800.53";
+                              throw new Exception("Invalid data reference. Data didn't match.");
+                         }
+                         var oldModel = await Service.Get(id);
+                         if (oldModel == null) {
+                              ErrorCode = "800.54";
                               throw new Exception("Invalid data reference. No data found.");
                          }
-                         var roles = Service.GetAll().Where(a => a.Id != viewModel.Id).ToList();
-                         role      = roles.Where(a => a.Name.ToLower() == viewModel.Name.ToLower()).FirstOrDefault();
-                         if (role != null) {
-                              ErrorCode = "800.54";
-                              throw new Exception(viewModel.Name + " was already exist!");
+                         var roles = Service.GetAll().Where(a => a.Id != viewModel.Id.Value).ToList();
+                         if (roles != null) {
+                              if (roles.Count > 0) {
+                                   role = roles.Where(a => a.Name.ToLower() == viewModel.Name.ToLower()).FirstOrDefault();
+                                   if (role != null) {
+                                        ErrorCode = "800.55";
+                                        throw new Exception(viewModel.Name + " was already exist!");
+                                   }
+                              }
                          }
-                         role.Name           = role.Name;
-                         role.Order          = viewModel.Order;
-                         role.DateUpdated    = DateTime.Now;
-                         role                = await Service.UpdateReturnAsync(role);
+                         oldModel.Name            = viewModel.Name;
+                         oldModel.Order           = viewModel.Order;
+                         oldModel.DateUpdated     = DateTime.Now;
+                         role                     = await Service.UpdateReturnAsync(oldModel);
+                         viewModel.DateCreated    = role.DateCreated;
+                         viewModel.DateUpdated    = role.DateUpdated;
+                         viewModel.Id             = id;
                     } catch (Exception ex) {
                          string message = ex.Message + (!string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
                          ErrorDetails.Add(message);
@@ -114,7 +126,7 @@ namespace XPW.Admin.Controllers {
                          MethodBase m        = MethodBase.GetCurrentMethod();
                          StackTrace trace    = new StackTrace(ex, true);
                          string sourceFile   = trace.GetFrame(0).GetFileName();
-                         ErrorLogs.Write(new ErrorLogsModel {
+                         await ErrorLogs.Write(new ErrorLogsModel {
                               Application    = Assembly.GetExecutingAssembly().GetName().Name,
                               Controller     = GetType().Name,
                               CurrentAction  = m.Name.Split('>')[0].TrimStart('<'),
@@ -126,10 +138,10 @@ namespace XPW.Admin.Controllers {
                               Method         = m.Name.Split('>')[0].TrimStart('<')
                          }, ex);
                     }
-                    return new GenericResponseModel<Role>() {
+                    return new GenericResponseModel<RoleModel>() {
                          Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
                          CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
-                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? role : null,
+                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? viewModel : null,
                          ErrorMessage        = string.IsNullOrEmpty(ErrorMessage) ? null : new ErrorMessage {
                               Details        = ErrorDetails,
                               ErrNumber      = ErrorCode,
