@@ -99,6 +99,7 @@
     <Compile Include="App_Models\Request\AccountModel.cs" />
     <Compile Include="App_Models\Request\RoleModel.cs" />
     <Compile Include="App_Models\Response\AccountActivationModel.cs" />
+    <Compile Include="App_Models\Response\AccountForgotPasswordModel.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\ApplicationAccessesController.cs" />

@@ -447,8 +447,8 @@ namespace XPW.Admin.Controllers {
                return await Task.Run(async () => {
                     var accountActivation = new AccountActivationModel();
                     try {
-                         ErrorCode = "800.9";
-                         var response = await accountService.ActivationPasscodeTokenValidator(token);
+                         ErrorCode = "800.91";
+                         var response = await accountService.ValidateActivationPasscodeToken(token);
                          response.Item1.Password = string.Empty;
                          accountActivation = new AccountActivationModel { Username = response.Item1.Username, IsValidated = response.Item2, Message = response.Item3 };
                     } catch (Exception ex) {
@@ -469,11 +469,99 @@ namespace XPW.Admin.Controllers {
                               StackTrace          = ex.ToString(),
                               Method              = methodBase.Name.Split('>')[0].TrimStart('<')
                          }, ex);
+                         accountActivation = new AccountActivationModel { Username = string.Empty, IsValidated = false, Message = message };
                     }
                     return new GenericResponseModel<AccountActivationModel>() {
                          Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
                          CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
                          ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? accountActivation : null,
+                         ErrorMessage        = string.IsNullOrEmpty(ErrorMessage) ? null : new ErrorMessage {
+                              Details        = ErrorDetails,
+                              ErrNumber      = ErrorCode,
+                              Message        = ErrorMessage
+                         }
+                    };
+               });
+          }
+          [Route("forgot-password/{userAccess}")]
+          [HttpPut]
+          public async Task<GenericResponseModel<AccountForgotPasswordModel>> ForgotPassword(string userAccess) {
+               return await Task.Run(async () => {
+                    var details = new AccountForgotPasswordModel();
+                    try {
+                         ErrorCode      = "800.92";
+                         var account    = await accountService.UpdateForgottenAccount(userAccess);
+                         string token   = account.RoleId.ToString() + "-" + account.DateCreated.ToString("yyddMM") + "_" + Checker.NumberExtractor(account.Id.ToString()) + "-" + account.AccountInformationId.ToString();
+                         string url     = appConfigManager.AppSetting<string>("AdminforgotPasswordURL", true, new AppConfigSettingsModel { Value = "https:\\\\localhost:9909\\Admin\\Token\\ForgotPassword?userAccess=", Group = "Admin" });
+                         url            += token;
+                         bool isSend    = await accountService.AccountEmail(account, "XPay.World Forgot Password", url);
+                         details        = new AccountForgotPasswordModel { Username = account.Username, IsSend = isSend, Token = token, Message = "Success" };
+                    } catch (Exception ex) {
+                         string message           = ex.Message + (!string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
+                         ErrorDetails.Add(message);
+                         ErrorMessage             = message;
+                         MethodBase methodBase    = MethodBase.GetCurrentMethod();
+                         StackTrace trace         = new StackTrace(ex, true);
+                         string sourceFile        = trace.GetFrame(0).GetFileName();
+                         await ErrorLogs.Write(new ErrorLogsModel {
+                              Application         = Assembly.GetExecutingAssembly().GetName().Name,
+                              Controller          = GetType().Name,
+                              CurrentAction       = methodBase.Name.Split('>')[0].TrimStart('<'),
+                              ErrorCode           = ErrorCode,
+                              Message             = message,
+                              SourceFile          = sourceFile,
+                              LineNumber          = trace.GetFrame(0).GetFileLineNumber(),
+                              StackTrace          = ex.ToString(),
+                              Method              = methodBase.Name.Split('>')[0].TrimStart('<')
+                         }, ex);
+                         details = new AccountForgotPasswordModel { Username = string.Empty, IsSend = false, Token = string.Empty, Message = message };
+                    }
+                    return new GenericResponseModel<AccountForgotPasswordModel>() {
+                         Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
+                         CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
+                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? details : null,
+                         ErrorMessage        = string.IsNullOrEmpty(ErrorMessage) ? null : new ErrorMessage {
+                              Details        = ErrorDetails,
+                              ErrNumber      = ErrorCode,
+                              Message        = ErrorMessage
+                         }
+                    };
+               });
+          }
+          [Route("forgot-password-validation/{token}")]
+          [HttpGet]
+          public async Task<GenericResponseModel<AccountForgotPasswordValidationModel>> ForgotPasswordValidation(string token) {
+               return await Task.Run(async () => {
+                    var validateModel = new AccountForgotPasswordValidationModel();
+                    try {
+                         ErrorCode = "800.91";
+                         var response = await accountService.ForgotPasswordTokenValidator(token);
+                         response.Item1.Password = string.Empty;
+                         validateModel = new AccountForgotPasswordValidationModel { Username = response.Item1.Username, IsValidated = response.Item2, Message = response.Item3 };
+                    } catch (Exception ex) {
+                         string message           = ex.Message + (!string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
+                         ErrorDetails.Add(message);
+                         ErrorMessage             = message;
+                         MethodBase methodBase    = MethodBase.GetCurrentMethod();
+                         StackTrace trace         = new StackTrace(ex, true);
+                         string sourceFile        = trace.GetFrame(0).GetFileName();
+                         await ErrorLogs.Write(new ErrorLogsModel {
+                              Application         = Assembly.GetExecutingAssembly().GetName().Name,
+                              Controller          = GetType().Name,
+                              CurrentAction       = methodBase.Name.Split('>')[0].TrimStart('<'),
+                              ErrorCode           = ErrorCode,
+                              Message             = message,
+                              SourceFile          = sourceFile,
+                              LineNumber          = trace.GetFrame(0).GetFileLineNumber(),
+                              StackTrace          = ex.ToString(),
+                              Method              = methodBase.Name.Split('>')[0].TrimStart('<')
+                         }, ex);
+                         validateModel = new AccountForgotPasswordValidationModel { Username = string.Empty, IsValidated = false, Message = message };
+                    }
+                    return new GenericResponseModel<AccountForgotPasswordValidationModel>() {
+                         Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
+                         CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
+                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? validateModel : null,
                          ErrorMessage        = string.IsNullOrEmpty(ErrorMessage) ? null : new ErrorMessage {
                               Details        = ErrorDetails,
                               ErrNumber      = ErrorCode,
