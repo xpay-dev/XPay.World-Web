@@ -443,7 +443,7 @@ namespace XPW.Admin.Controllers {
           }
           [Route("account-confirmation/{token}")]
           [HttpPut]
-          public async Task<GenericResponseModel<AccountActivationModel>> AccountConfirmation(string token) {
+          public async Task<GenericResponseModel<AccountActivationModel>> AccountConfirmation([FromUri]string token) {
                return await Task.Run(async () => {
                     var accountActivation = new AccountActivationModel();
                     try {
@@ -485,13 +485,13 @@ namespace XPW.Admin.Controllers {
           }
           [Route("forgot-password/{userAccess}")]
           [HttpPut]
-          public async Task<GenericResponseModel<AccountForgotPasswordModel>> ForgotPassword(string userAccess) {
+          public async Task<GenericResponseModel<AccountForgotPasswordModel>> ForgotPassword([FromUri]string userAccess) {
                return await Task.Run(async () => {
                     var details = new AccountForgotPasswordModel();
                     try {
                          ErrorCode      = "800.92";
                          var account    = await accountService.UpdateForgottenAccount(userAccess);
-                         string token   = account.RoleId.ToString() + "-" + account.DateCreated.ToString("yyddMM") + "_" + Checker.NumberExtractor(account.Id.ToString()) + "-" + account.AccountInformationId.ToString();
+                         string token   = account.RoleId.ToString() + "-" + account.DateUpdated.Value.ToString("yyddMM") + "_" + Checker.NumberExtractor(account.Id.ToString()) + "-" + account.AccountInformationId.ToString();
                          string url     = appConfigManager.AppSetting<string>("AdminforgotPasswordURL", true, new AppConfigSettingsModel { Value = "https:\\\\localhost:9909\\Admin\\Token\\ForgotPassword?userAccess=", Group = "Admin" });
                          url            += token;
                          bool isSend    = await accountService.AccountEmail(account, "XPay.World Forgot Password", url);
@@ -530,7 +530,7 @@ namespace XPW.Admin.Controllers {
           }
           [Route("forgot-password-validation/{token}")]
           [HttpGet]
-          public async Task<GenericResponseModel<AccountForgotPasswordValidationModel>> ForgotPasswordValidation(string token) {
+          public async Task<GenericResponseModel<AccountForgotPasswordValidationModel>> ForgotPasswordValidation([FromUri]string token) {
                return await Task.Run(async () => {
                     var validateModel = new AccountForgotPasswordValidationModel();
                     try {
@@ -562,6 +562,72 @@ namespace XPW.Admin.Controllers {
                          Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
                          CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
                          ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? validateModel : null,
+                         ErrorMessage        = string.IsNullOrEmpty(ErrorMessage) ? null : new ErrorMessage {
+                              Details        = ErrorDetails,
+                              ErrNumber      = ErrorCode,
+                              Message        = ErrorMessage
+                         }
+                    };
+               });
+          }
+          [Route("forgot-password-change/{token}")]
+          [HttpPut]
+          public async Task<GenericResponseModel<AccountForgotChangePasswordModel>> ForgotPasswordChange([FromUri]string token, [FromBody]ForgotPassswordModel viewModel) {
+               return await Task.Run(async () => {
+                    var details = new AccountForgotChangePasswordModel();
+                    try {
+                         ErrorCode = "800.93";
+                         if (token != viewModel.Token) {
+                              ErrorCode = "800.931";
+                              throw new Exception("Invalid token.");
+                         }
+                         var response = await accountService.ForgotPasswordTokenValidator(token);
+                         if (!response.Item2) {
+                              ErrorCode = "800.932";
+                              throw new Exception(response.Item3);
+                         }
+                         Account account = response.Item1;
+                         if (account.Username != viewModel.Username) { 
+                              ErrorCode = "800.933";
+                              throw new Exception("Invalid account or password!");
+                         }
+                         if (crypto.Decrypt(account.Password) != viewModel.CurrentPassword) {
+                              ErrorCode = "800.934";
+                              throw new Exception("Invalid account or password!");
+                         }
+                         if (viewModel.NewPassword == viewModel.CurrentPassword) {
+                              ErrorCode = "800.935";
+                              throw new Exception("New password is the same as the previous password.");
+                         }
+                         account.Password = crypto.Encrypt(viewModel.NewPassword);
+                         account = await Service.UpdateReturnAsync(account);
+                         details = new AccountForgotChangePasswordModel { IsSend = false, Message = "Updated", IsChange = true, Username = viewModel.Username };
+                         bool isSend = await accountService.AccountForgotPasswordEmail(account, "XPay.World Forgot Password Successfully Updated");
+                         details = new AccountForgotChangePasswordModel { IsSend = isSend, Message = "Success", IsChange = true, Username = viewModel.Username };
+                    } catch (Exception ex) {
+                         string message           = ex.Message + (!string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
+                         ErrorDetails.Add(message);
+                         ErrorMessage             = message;
+                         MethodBase methodBase    = MethodBase.GetCurrentMethod();
+                         StackTrace trace         = new StackTrace(ex, true);
+                         string sourceFile        = trace.GetFrame(0).GetFileName();
+                         await ErrorLogs.Write(new ErrorLogsModel {
+                              Application         = Assembly.GetExecutingAssembly().GetName().Name,
+                              Controller          = GetType().Name,
+                              CurrentAction       = methodBase.Name.Split('>')[0].TrimStart('<'),
+                              ErrorCode           = ErrorCode,
+                              Message             = message,
+                              SourceFile          = sourceFile,
+                              LineNumber          = trace.GetFrame(0).GetFileLineNumber(),
+                              StackTrace          = ex.ToString(),
+                              Method              = methodBase.Name.Split('>')[0].TrimStart('<')
+                         }, ex);
+                         details = new AccountForgotChangePasswordModel { IsSend = false, Message = message, IsChange = false, Username = viewModel.Username };
+                    }
+                    return new GenericResponseModel<AccountForgotChangePasswordModel>() {
+                         Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
+                         CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
+                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? details : null,
                          ErrorMessage        = string.IsNullOrEmpty(ErrorMessage) ? null : new ErrorMessage {
                               Details        = ErrorDetails,
                               ErrNumber      = ErrorCode,

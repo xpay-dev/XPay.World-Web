@@ -182,7 +182,96 @@ namespace XPW.CommonData.XPWAdmin.ervices {
                     }
                });
           }
-          public async Task<bool> AccountForgotPasswordEmail(Account account, string subject, string applicationUrl) {
+          public async Task<bool> AccountForgotPasswordEmail(Account account, string subject) {
+               try {
+                    List<EmailManagementodelReceipientModel> receipients = new List<EmailManagementodelReceipientModel>();
+                    string displayName = account.AccountInformation.FirstName + (!string.IsNullOrEmpty(account.AccountInformation.MiddleName) ? " " + account.AccountInformation.MiddleName : string.Empty) + " " + account.AccountInformation.LastName;
+                    receipients.Add(new EmailManagementodelReceipientModel {
+                         DisplayName = displayName,
+                         Email = account.EmailAddress
+                    });
+                    account = Repository.AllIncluding(a => a.AccountInformation).Where(a => a.Id == account.Id).FirstOrDefault();
+                    string htmlBody = "<html><body><h1>Forgot Password!</h1><br><br><br>"
+                      + "Hi " + account.AccountInformation.FirstName + " " + account.AccountInformation.LastName + ",<br />"
+                      + "Your account password has been successfully change.<br /><br /><br />"
+                      + "If you need any assistance, please feel free to contact us at <a href=\"mailto:support-admin@xpay.world\">support-admin@xpay.world</a><br /><br /><br />"
+                      + "*This email contains important and confidential information about your XPay.World Account, please save this message for future reference.<br /><br /><br />"
+                      + "Thank You,<br />XPay.World<br /></body></html>";
+                    await Task.Run(() => {
+                         new EmailSending().SendEmail(new EmailManagementodel {
+                              EmailBccReceipients = new List<EmailManagementodelReceipientModel>(),
+                              EmailCcReceipients = new List<EmailManagementodelReceipientModel>(),
+                              EmailReceipients = receipients,
+                              SenderDisplayName = displayName,
+                              Subject = subject,
+                              EmailContent = AlternateView.CreateAlternateViewFromString(htmlBody, null, MediaTypeNames.Text.Html)
+                         }, "Admin", "Default");
+                    });
+                    return true;
+               } catch (Exception ex) {
+                    return false;
+               }
+          }
+          public async Task<Tuple<Account, bool, string>> ForgotPasswordTokenValidator(string token) {
+               return await Task.Run(async () => {
+                    try {
+                         List<Account> accounts = base.GetAll().ToList();
+                         List<string> passcodes = new List<string>();
+                         if (accounts == null) {
+                              throw new Exception("Sorry, account not found");
+                         }
+                         if (accounts.Count == 0) {
+                              throw new Exception("Sorry, account not found");
+                         }
+                         accounts.ForEach(a => {
+                              passcodes.Add(a.Id + "=" + a.RoleId.ToString() + "-" + a.DateUpdated.Value.ToString("yyddMM") + "_" + Checker.NumberExtractor(a.Id.ToString()) + "-" + a.AccountInformationId.ToString());
+                         });
+                         string Id           = string.Empty;
+                         string RoleId       = string.Empty;
+                         string DateUpdated  = string.Empty;
+                         string AccInfoId    = string.Empty;
+                         string[] passcodeArray = passcodes.ToArray();
+                         for (int i = 0; i < passcodes.Count; i++) {
+                              string[] values = passcodeArray[i].Split('=');
+                              if (!string.IsNullOrEmpty(Id)) {
+                                   break;
+                              } else {
+                                   if (values[1] == token) {
+                                        Id             = values[0];
+                                        RoleId         = values[1].Split('-')[0];
+                                        DateUpdated    = values[1].Split('-')[1];
+                                        AccInfoId      = values[1].Split('-')[3];
+                                   }
+                              }
+                         };
+                         if (string.IsNullOrEmpty(Id)) {
+                              throw new Exception("Sorry, account not found");
+                         }
+                         Account account = await Get(Guid.Parse(Id));
+                         if (account == null) {
+                         }
+                         if (account.IsDeleted) {
+                              throw new Exception("Sorry, account not found");
+                         }
+                         if (account.DateUpdated.Value.AddMinutes(70) < DateTime.Now) {
+                              throw new Exception("Invalid activation Token");
+                         }
+                         if (account.AccountInformationId.ToString() != AccInfoId) {
+                              throw new Exception("Invalid activation Token");
+                         }
+                         if (account.RoleId.ToString() != RoleId) {
+                              throw new Exception("Invalid activation Token");
+                         }
+                         if (account.DateUpdated.Value.ToString("yyddMM") != DateUpdated) {
+                              throw new Exception("Invalid activation Token");
+                         }
+                         return new Tuple<Account, bool, string>(account, true, "Validated");
+                    } catch (Exception ex) {
+                         return new Tuple<Account, bool, string>(null, false, ex.Message);
+                    }
+               });
+          }
+          public async Task<bool> AccountForgotPasswordEmailUpdate(Account account, string subject, string applicationUrl) {
                try {
                     List<EmailManagementodelReceipientModel> receipients = new List<EmailManagementodelReceipientModel>();
                     string displayName = account.AccountInformation.FirstName + (!string.IsNullOrEmpty(account.AccountInformation.MiddleName) ? " " + account.AccountInformation.MiddleName : string.Empty) + " " + account.AccountInformation.LastName;
@@ -213,65 +302,6 @@ namespace XPW.CommonData.XPWAdmin.ervices {
                } catch (Exception ex) {
                     return false;
                }
-          }
-          public async Task<Tuple<Account, bool, string>> ForgotPasswordTokenValidator(string token) {
-               return await Task.Run(async () => {
-                    try {
-                         List<Account> accounts = base.GetAll().ToList();
-                         List<string> passcodes = new List<string>();
-                         if (accounts == null) {
-                              throw new Exception("Sorry, account not found");
-                         }
-                         if (accounts.Count == 0) {
-                              throw new Exception("Sorry, account not found");
-                         }
-                         accounts.ForEach(a => {
-                              passcodes.Add(a.Id + "=" + a.RoleId.ToString() + "-" + a.DateCreated.ToString("yyddMM") + "_" + Checker.NumberExtractor(a.Id.ToString()) + "-" + a.AccountInformationId.ToString());
-                         });
-                         string Id           = string.Empty;
-                         string RoleId       = string.Empty;
-                         string DateCreated  = string.Empty;
-                         string AccInfoId    = string.Empty;
-                         string[] passcodeArray = passcodes.ToArray();
-                         for (int i = 0; i < passcodes.Count; i++) {
-                              string[] values = passcodeArray[i].Split('=');
-                              if (!string.IsNullOrEmpty(Id)) {
-                                   break;
-                              } else {
-                                   if (values[1] == token) {
-                                        Id             = values[0];
-                                        RoleId         = values[1].Split('-')[0];
-                                        DateCreated    = values[1].Split('-')[1];
-                                        AccInfoId      = values[1].Split('-')[3];
-                                   }
-                              }
-                         };
-                         if (string.IsNullOrEmpty(Id)) {
-                              throw new Exception("Sorry, account not found");
-                         }
-                         Account account = await Get(Guid.Parse(Id));
-                         if (account == null) {
-                         }
-                         if (account.IsDeleted) {
-                              throw new Exception("Sorry, account not found");
-                         }
-                         if (account.DateUpdated.Value.AddMinutes(70) < DateTime.Now) {
-                              throw new Exception("Invalid activation Token");
-                         }
-                         if (account.AccountInformationId.ToString() != AccInfoId) {
-                              throw new Exception("Invalid activation Token");
-                         }
-                         if (account.RoleId.ToString() != RoleId) {
-                              throw new Exception("Invalid activation Token");
-                         }
-                         if (account.DateCreated.ToString("yyddMM") != DateCreated) {
-                              throw new Exception("Invalid activation Token");
-                         }
-                         return new Tuple<Account, bool, string>(account, true, "Validated");
-                    } catch (Exception ex) {
-                         return new Tuple<Account, bool, string>(null, false, ex.Message);
-                    }
-               });
           }
      }
 }

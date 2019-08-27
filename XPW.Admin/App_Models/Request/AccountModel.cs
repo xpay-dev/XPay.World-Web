@@ -99,4 +99,10 @@ namespace XPW.Admin.App_Models.Request {
           public DateTime DateCreated { get; set; }
           public DateTime? DateUpdated { get; set; }
      }
+     public class ForgotPassswordModel {
+          public string Token { get; set; }
+          public string Username { get; set; }
+          public string CurrentPassword { get; set; }
+          public string NewPassword { get; set; }
+     }
 }
