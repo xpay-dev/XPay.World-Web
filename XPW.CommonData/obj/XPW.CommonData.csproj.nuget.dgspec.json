@@ -1,21 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\XPAY.DEV2\\Documents\\XPay.World-Web\\XPW.CommonData\\XPW.CommonData.csproj": {}
+    "E:\\Users\\Gabby Peneyra\\source\\repos\\Xpay.Web\\XPW.CommonData\\XPW.CommonData.csproj": {}
   },
   "projects": {
-    "C:\\Users\\XPAY.DEV2\\Documents\\XPay.World-Web\\XPW.CommonData\\XPW.CommonData.csproj": {
+    "E:\\Users\\Gabby Peneyra\\source\\repos\\Xpay.Web\\XPW.CommonData\\XPW.CommonData.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\XPAY.DEV2\\Documents\\XPay.World-Web\\XPW.CommonData\\XPW.CommonData.csproj",
+        "projectUniqueName": "E:\\Users\\Gabby Peneyra\\source\\repos\\Xpay.Web\\XPW.CommonData\\XPW.CommonData.csproj",
         "projectName": "XPW.CommonData",
-        "projectPath": "C:\\Users\\XPAY.DEV2\\Documents\\XPay.World-Web\\XPW.CommonData\\XPW.CommonData.csproj",
-        "packagesPath": "C:\\Users\\XPAY.DEV2\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\XPAY.DEV2\\Documents\\XPay.World-Web\\XPW.CommonData\\obj\\",
+        "projectPath": "E:\\Users\\Gabby Peneyra\\source\\repos\\Xpay.Web\\XPW.CommonData\\XPW.CommonData.csproj",
+        "packagesPath": "C:\\Users\\Gabby Peneyra\\.nuget\\packages\\",
+        "outputPath": "E:\\Users\\Gabby Peneyra\\source\\repos\\Xpay.Web\\XPW.CommonData\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [
-          "C:\\Users\\XPAY.DEV2\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Gabby Peneyra\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
