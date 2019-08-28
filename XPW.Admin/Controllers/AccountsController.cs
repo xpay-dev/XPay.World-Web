@@ -492,7 +492,7 @@ namespace XPW.Admin.Controllers {
                          ErrorCode      = "800.92";
                          var account    = await accountService.UpdateForgottenAccount(userAccess);
                          string token   = account.RoleId.ToString() + "-" + account.DateUpdated.Value.ToString("yyddMM") + "_" + Checker.NumberExtractor(account.Id.ToString()) + "-" + account.AccountInformationId.ToString();
-                         string url     = appConfigManager.AppSetting<string>("AdminforgotPasswordURL", true, new AppConfigSettingsModel { Value = "https:\\\\localhost:9909\\Admin\\Token\\ForgotPassword?userAccess=", Group = "Admin" });
+                         string url     = appConfigManager.AppSetting<string>("AdminForgotPasswordURL", true, new AppConfigSettingsModel { Value = "https:\\\\localhost:9909\\Admin\\Token\\ForgotPassword?userAccess=", Group = "Admin" });
                          url            += token;
                          bool isSend    = await accountService.AccountEmail(account, "XPay.World Forgot Password", url);
                          details        = new AccountForgotPasswordModel { Username = account.Username, IsSend = isSend, Token = token, Message = "Success" };
@@ -625,6 +625,55 @@ namespace XPW.Admin.Controllers {
                          details = new AccountForgotChangePasswordModel { IsSend = false, Message = message, IsChange = false, Username = viewModel.Username };
                     }
                     return new GenericResponseModel<AccountForgotChangePasswordModel>() {
+                         Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
+                         CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
+                         ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? details : null,
+                         ErrorMessage        = string.IsNullOrEmpty(ErrorMessage) ? null : new ErrorMessage {
+                              Details        = ErrorDetails,
+                              ErrNumber      = ErrorCode,
+                              Message        = ErrorMessage
+                         }
+                    };
+               });
+          }
+          [Route("reset-password/{id}")]
+          [HttpPut]
+          public async Task<GenericResponseModel<AccountResetPasswordModel>> ResetPassword(Guid id) {
+               return await Task.Run(async () => {
+                    AccountResetPasswordModel details = new AccountResetPasswordModel();
+                    try {
+                         ErrorCode = "800.94";
+                         if (id == Guid.Empty) {
+                              ErrorCode = "800.941";
+                              throw new Exception("Invalid reference parameter");
+                         }
+                         Account account = await accountService.AccountResetPassword(id);
+                         string token = account.RoleId.ToString() + "-" + account.DateUpdated.Value.ToString("yyddMM") + "_" + Checker.NumberExtractor(account.Id.ToString()) + "-" + account.AccountInformationId.ToString();
+                         string url = appConfigManager.AppSetting<string>("AdminResetPasswordURL", true, new AppConfigSettingsModel { Value = "https:\\\\localhost:9909\\Admin\\Token\\ForgotPassword?userAccess=", Group = "Admin" });
+                         url += token;
+                         bool isSend = await accountService.AccountEmail(account, "XPay.World Reset Password", url);
+                         details = new AccountResetPasswordModel { Username = account.Username, IsSend = isSend, IsChange = true, Message = "Success" };
+                    } catch (Exception ex) {
+                         string message           = ex.Message + (!string.IsNullOrEmpty(ex.InnerException.Message) && ex.Message != ex.InnerException.Message ? " Reason : " + ex.InnerException.Message : string.Empty);
+                         ErrorDetails.Add(message);
+                         ErrorMessage             = message;
+                         MethodBase methodBase    = MethodBase.GetCurrentMethod();
+                         StackTrace trace         = new StackTrace(ex, true);
+                         string sourceFile        = trace.GetFrame(0).GetFileName();
+                         await ErrorLogs.Write(new ErrorLogsModel {
+                              Application         = Assembly.GetExecutingAssembly().GetName().Name,
+                              Controller          = GetType().Name,
+                              CurrentAction       = methodBase.Name.Split('>')[0].TrimStart('<'),
+                              ErrorCode           = ErrorCode,
+                              Message             = message,
+                              SourceFile          = sourceFile,
+                              LineNumber          = trace.GetFrame(0).GetFileLineNumber(),
+                              StackTrace          = ex.ToString(),
+                              Method              = methodBase.Name.Split('>')[0].TrimStart('<')
+                         }, ex);
+                         details = new AccountResetPasswordModel { IsSend = false, Message = message, IsChange = false, Username = string.Empty };
+                    }
+                    return new GenericResponseModel<AccountResetPasswordModel>() {
                          Code                = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success : Utilities.Enums.CodeStatus.Error,
                          CodeStatus          = string.IsNullOrEmpty(ErrorMessage) ? Utilities.Enums.CodeStatus.Success.ToString() : Utilities.Enums.CodeStatus.Error.ToString(),
                          ReferenceObject     = string.IsNullOrEmpty(ErrorMessage) ? details : null,

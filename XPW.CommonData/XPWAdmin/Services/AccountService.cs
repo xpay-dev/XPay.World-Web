@@ -303,5 +303,22 @@ namespace XPW.CommonData.XPWAdmin.ervices {
                     return false;
                }
           }
+          public async Task<Account> AccountResetPassword(Guid id) {
+               return await Task.Run(() => {
+                    try {
+                         Account account = Repository.AllIncluding(a => a.AccountInformation).Where(a => a.Id == id).FirstOrDefault();
+                         if (account == null) {
+                              throw new Exception("Invalid Account details");
+                         }
+                         string newPassword = Generator.StringGenerator();
+                         account.Password = crypto.Encrypt(newPassword);
+                         account.DateUpdated = DateTime.Now;
+                         UpdateAsync(account);
+                         return account;
+                    } catch (Exception ex) {
+                         throw ex;
+                    }
+               });
+          }
      }
 }
